@@ -1,9 +1,5 @@
 #!/usr/bin/env node
-const chalk = require('chalk');
-const clear = require('clear');
-const figlet = require('figlet');
-const path = require('path');
-const program = require('commander');
+import chalk from 'chalk';
+import { standardEntry } from './shared/help-intro';
 
-clear();
-console.log(chalk.red(figlet.textSync('pizza-cli', { horizontalLayout: 'full' })));
+standardEntry('Test', 'Test Description').option('-t --test', 'Test Option').parse(process.argv);

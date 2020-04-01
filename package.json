@@ -7,7 +7,8 @@
   },
   "scripts": {
     "test": "jest",
-    "build": "tsc -p ."
+    "build": "tsc -p .",
+    "ts-node": "ts-node"
   },
   "keywords": [
     "capacitor",
@@ -20,6 +21,8 @@
   "author": "Colum Ferry",
   "license": "MIT",
   "devDependencies": {
+    "@types/clear": "^0.1.0",
+    "@types/figlet": "^1.2.0",
     "@types/jest": "^25.1.4",
     "@types/node": "^13.9.8",
     "cz-conventional-changelog": "^3.1.0",
