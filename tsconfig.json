@@ -6,6 +6,7 @@
     "declaration": true,
     "outDir": "bin",
     "rootDir": "src",
+    "baseUrl": "./src",
     "strict": true,
     "types": ["node"],
     "esModuleInterop": true,

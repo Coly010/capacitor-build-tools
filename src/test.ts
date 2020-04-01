@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-import chalk from 'chalk';
-import { standardEntry } from './shared/help-intro';
+import { standardEntry } from 'shared/standard-entry';
 
-standardEntry('Test', 'Test Description').option('-t --test', 'Test Option').parse(process.argv);
+standardEntry('Test', 'Test Description', (program) =>
+  program.option('-t --test', 'Test Option')
+);
