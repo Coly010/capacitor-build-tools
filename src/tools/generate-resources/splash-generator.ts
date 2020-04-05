@@ -1,3 +1,4 @@
+import { IOS } from './constants/ios.const';
 import fs from 'fs';
 import chalk from 'chalk';
 import path from 'path';
@@ -5,24 +6,14 @@ import { noTry } from 'no-try';
 
 import { logger } from './../../shared/logger';
 import { ANDROID } from './constants/android.const';
-import { Platform, coverImage } from '../../shared/utils';
+import { Platform, coverImage, resizeImage } from '../../shared/utils';
 
-const PLATFORM_DIRECTORIES = {
-  android: {
-    splash: {
-      prefix: 'drawable',
-      orientation: ['land', 'port'],
-      directories: ['hdpi', 'mdpi', 'xhdpi', 'xxhdpi', 'xxxhdpi'],
-      fileNames: ['splash'],
-    },
-  },
-  ios: {
-    icon: {
-      prefix: '',
-      orientation: ['land', 'port'],
-      directories: ['hdpi', 'mdpi', 'xhdpi', 'xxhdpi', 'xxxhdpi'],
-      fileNames: ['splash'],
-    },
+const ANDROID_DIRECTORIES = {
+  splash: {
+    prefix: 'drawable',
+    orientation: ['land', 'port'],
+    directories: ['hdpi', 'mdpi', 'xhdpi', 'xxhdpi', 'xxxhdpi'],
+    fileNames: ['splash'],
   },
 };
 
@@ -52,7 +43,7 @@ export async function generateSplash(
   }
 
   if (platforms.includes('ios')) {
-    await generateAndroidSplash(splashPath, 'land');
+    await generateIosSplash(splashPath);
   }
 }
 
@@ -60,7 +51,7 @@ async function generateAndroidSplash(
   splashPath: string,
   orientation: 'land' | 'port'
 ) {
-  const android = PLATFORM_DIRECTORIES['android'];
+  const android = ANDROID_DIRECTORIES;
   for (const dir of android.splash.directories) {
     logger().verbose(`Processing directory: ${dir}`);
 
@@ -91,4 +82,26 @@ async function generateAndroidSplash(
   }
 
   orientation = 'port';
+}
+
+async function generateIosSplash(splashPath: string) {
+  logger().info(`Writing iOS splash files...`);
+
+  for (const file of Object.keys(IOS.splash)) {
+    const outDir = `${path.dirname(splashPath)}/ios/splash`;
+
+    if (!fs.existsSync(outDir)) {
+      logger().info(
+        chalk.yellow('Output directory does not exist. Creating now...')
+      );
+
+      fs.mkdirSync(outDir, { recursive: true });
+    }
+
+    const outFile = await resizeImage(splashPath, IOS.splash[file]);
+
+    outFile.writeAsync(`${outDir}/${file}.png`);
+
+    logger().verbose(chalk.green(`Successfully generated ${file}.png`));
+  }
 }
