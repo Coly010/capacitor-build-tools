@@ -5,6 +5,7 @@ import path from 'path';
 import { standardEntry } from '../../shared/standard-entry';
 import { logger } from './../../shared/logger';
 import { Platform } from './constants/platform-resource';
+import { generateIcon } from './icon-generator';
 
 const program = standardEntry(
   'Generate Resources',
@@ -28,10 +29,12 @@ if (!program.icon && !program.splash) {
 }
 
 // setup the platforms to generate
-const plaftorms: Platform[] = [];
-program.android && plaftorms.push('android');
-program.ios && plaftorms.push('ios');
+const platforms: Platform[] = [];
+program.android && platforms.push('android');
+program.ios && platforms.push('ios');
 
 // fetch the icon file
 const iconFilePath = path.resolve(process.cwd(), program.icon);
-logger().info(iconFilePath);
+logger().info(`Icon file path: ${iconFilePath}`);
+
+generateIcon(iconFilePath, platforms);

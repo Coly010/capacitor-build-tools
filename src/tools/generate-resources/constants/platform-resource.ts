@@ -1,17 +1,25 @@
-type ResourceSize = {
+export type ResourceSize = {
   size: [number, number];
   bleed: [number, number];
 };
 
 export type Platform = 'ios' | 'android';
 
-export type PlatformResources = {
-  [dpi: string]: {
-    icon: {
-      ic_launcher_foreground: ResourceSize;
-      ic_launcher_round: ResourceSize;
-      ic_launcher: ResourceSize;
-    };
-    splash: ResourceSize;
-  };
+type AndroidIcon = {
+  [key: string]: ResourceSize;
+  ic_launcher_foreground: ResourceSize;
+  ic_launcher_round: ResourceSize;
+  ic_launcher: ResourceSize;
 };
+
+export type PlatformResources<T extends Platform> = T extends 'android'
+  ? {
+      [dpi: string]: {
+        icon: AndroidIcon;
+        splash: {
+          port: ResourceSize;
+          land: ResourceSize;
+        };
+      };
+    }
+  : {};
