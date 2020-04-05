@@ -16,10 +16,8 @@ type AndroidIcon = {
   ic_launcher: ResourceSize;
 };
 
-type AndroidSplash = {
+type IosResource = {
   [key: string]: ResourceSize;
-  port: ResourceSize;
-  land: ResourceSize;
 };
 
 export type PlatformResources<T extends Platform> = T extends 'android'
@@ -32,7 +30,10 @@ export type PlatformResources<T extends Platform> = T extends 'android'
         };
       };
     }
-  : {};
+  : {
+      icon: IosResource;
+      splash: IosResource;
+    };
 
 export function readJimp(imagePath: string) {
   return Jimp.read(imagePath);

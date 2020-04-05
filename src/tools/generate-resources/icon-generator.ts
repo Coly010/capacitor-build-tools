@@ -1,3 +1,4 @@
+import { IOS } from './constants/ios.const';
 import fs from 'fs';
 import chalk from 'chalk';
 import path from 'path';
@@ -12,20 +13,11 @@ import {
   Platform,
 } from '../../shared/utils';
 
-const PLATFORM_DIRECTORIES = {
-  android: {
-    icon: {
-      prefix: 'mipmap',
-      directories: ['hdpi', 'mdpi', 'xhdpi', 'xxhdpi', 'xxxhdpi'],
-      fileNames: ['ic_launcher', 'ic_launcher_round', 'ic_launcher_foreground'],
-    },
-  },
-  ios: {
-    icon: {
-      prefix: '',
-      directories: ['hdpi'],
-      fileNames: [],
-    },
+const ANDROID_DIRECTORIES = {
+  icon: {
+    prefix: 'mipmap',
+    directories: ['hdpi', 'mdpi', 'xhdpi', 'xxhdpi', 'xxxhdpi'],
+    fileNames: ['ic_launcher', 'ic_launcher_round', 'ic_launcher_foreground'],
   },
 };
 
@@ -46,14 +38,14 @@ export async function generateIcon(iconPath: string, platforms: Platform[]) {
   }
 
   if (platforms.includes('ios')) {
-    await generateAndroidIcons(iconPath);
+    await generateIosIcons(iconPath);
   }
 }
 
 async function generateAndroidIcons(iconPath: string) {
   logger().info(`Writing android icon files...`);
 
-  const android = PLATFORM_DIRECTORIES['android'];
+  const android = ANDROID_DIRECTORIES;
 
   for (const dir of android.icon.directories) {
     logger().verbose(`Processing directory: ${dir}`);
@@ -87,5 +79,27 @@ async function generateAndroidIcons(iconPath: string) {
 
       logger().verbose(chalk.green(`Successfully generated ${file}.png`));
     }
+  }
+}
+
+async function generateIosIcons(iconPath: string) {
+  logger().info(`Writing iOS icon files...`);
+
+  for (const file of Object.keys(IOS.icon)) {
+    const outDir = `${path.dirname(iconPath)}/ios/icon`;
+
+    if (!fs.existsSync(outDir)) {
+      logger().info(
+        chalk.yellow('Output directory does not exist. Creating now...')
+      );
+
+      fs.mkdirSync(outDir, { recursive: true });
+    }
+
+    const outFile = await resizeImage(iconPath, IOS.icon[file]);
+
+    outFile.writeAsync(`${outDir}/${file}.png`);
+
+    logger().verbose(chalk.green(`Successfully generated ${file}.png`));
   }
 }
