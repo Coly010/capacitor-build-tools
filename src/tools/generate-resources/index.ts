@@ -2,10 +2,11 @@
 import chalk from 'chalk';
 import path from 'path';
 
+import { Platform } from './../../shared/utils';
 import { standardEntry } from '../../shared/standard-entry';
 import { logger } from './../../shared/logger';
-import { Platform } from './constants/platform-resource';
 import { generateIcon } from './icon-generator';
+import { generateSplash } from './splash-generator';
 
 const program = standardEntry(
   'Generate Resources',
@@ -38,3 +39,9 @@ const iconFilePath = path.resolve(process.cwd(), program.icon);
 logger().info(`Icon file path: ${iconFilePath}`);
 
 generateIcon(iconFilePath, platforms);
+
+// fetch the splash file
+const splashFilePath = path.resolve(process.cwd(), program.splash);
+logger().info(`Splash file path: ${splashFilePath}`);
+
+generateSplash(splashFilePath, platforms);

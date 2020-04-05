@@ -1,4 +1,4 @@
-import { PlatformResources } from './platform-resource';
+import { PlatformResources } from '../../../shared/utils';
 
 export const ANDROID: PlatformResources<'android'> = {
   hdpi: {
