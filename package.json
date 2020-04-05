@@ -1,6 +1,6 @@
 {
   "name": "capacitor-build-tools",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Build tools to aid automated CI/CD of capacitor apps",
   "bin": {
     "test-cap-build": "bin/test.js",
